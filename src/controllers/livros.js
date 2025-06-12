@@ -12,6 +12,24 @@ async function getLivros(req, res) {
     }
 }
 
+async function getLivroById(req, res) {
+    const { id } = req.params;
+
+    try {
+        const livro = await Livros.findByPk(id);
+
+        if (!livro) {
+            return res.status(404).send('Livro não encontrado');
+        }
+
+        return res.send(livro);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Erro ao buscar livro');
+    }
+}
+
 async function createLivro(req, res) {
     try {
         const livro = await Livros.create(req.body)
@@ -40,8 +58,32 @@ async function deleteLivro(req, res){
     }
 }
 
+async function updateLivro(req, res) {
+    const { id } = req.params;
+
+    try {
+        const [updated] = await Livros.update(req.body, {
+            where: { id: id }
+        });
+
+        if (!updated) {
+            return res.status(404).send('Livro não encontrado');
+        }
+
+        const livroAtualizado = await Livros.findByPk(id);
+        return res.send(livroAtualizado);
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send('Erro ao atualizar livro');
+    }
+}
+
+
 module.exports = {
     getLivros,
+    getLivroById,
     createLivro,
-    deleteLivro
+    deleteLivro,
+    updateLivro
 }
