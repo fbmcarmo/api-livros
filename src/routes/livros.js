@@ -9,11 +9,23 @@ router.get(
     //authMiddleware.validateToken,
     livrosController.getLivros
 )
+router.get(
+    '/livros/:id',
+    // authMiddleware.validateToken,
+    livrosMiddleware.validateGetLivroById,
+    livrosController.getLivroById
+)
 router.post(
     '/livros',
     //authMiddleware.validateToken,
     livrosMiddleware.validateCreateLivro,
     livrosController.createLivro
+)
+router.put(
+    '/livros/:id',
+    // authMiddleware.validateToken,
+    livrosMiddleware.validateUpdateLivro,
+    livrosController.updateLivro
 )
 router.delete(
     '/livros/:id',
