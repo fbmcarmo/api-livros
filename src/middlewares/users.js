@@ -2,15 +2,15 @@ const{ Users } = require('../models');
 const bcrypt = require('bcrypt')
 
 async function validateCreateUsers(req, res, next){
-    const {name, email, password} = req.body
+    const {nome, email, password} = req.body
 
-    if(!name || !email || !password){
+    if(!nome || !email || !password){
         return res.status(400).send({
             error: 'Todos os campos são obrigatórios!'
         })
     }
     
-    if(name.length > 255){
+    if(nome.length > 255){
         return res.status(400).send({
             error: 'O nome não pode ter mais que 255 caracteres'
         })
@@ -63,15 +63,15 @@ function validateGetUsersById(req, res, next){
 
 
 async function validateUpdateUsers(req, res, next){
-    const {name, email, password} = req.body
+    const {nome, email, password} = req.body
 
-    if(!name || !email || !password){
+    if(!nome || !email || !password){
         return res.status(400).send({
             error: 'Todos os campos são obrigatórios para atualização!'
         })
     }
     
-    if(name.length > 255){
+    if(nome.length > 255){
         return res.status(400).send({
             error: 'O nome não pode ter mais que 255 caracteres'
         })
