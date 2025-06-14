@@ -10,10 +10,11 @@ const cors = require('cors')
 
 
 
-app.use(cors())
-app.use(express.json())
-app.use(livrosRoutes)
-app.use(authRoutes)
+app.use(cors());
+app.use(express.json());
+app.use(livrosRoutes);
+app.use(authRoutes);
+app.use(usersRoutes)
 
 
 app.listen(port, () => {
