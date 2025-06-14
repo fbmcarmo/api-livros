@@ -4,7 +4,7 @@ const app = express()
 const port = process.env.PORT || 6579;
 require('./src/models')
 const livrosRoutes = require('./src/routes/livros')
-//const usersRoutes = require('./src/routes/users')
+const usersRoutes = require('./src/routes/users')
 const authRoutes = require('./src/routes/auth')
 const cors = require('cors')
 
