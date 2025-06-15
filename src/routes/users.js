@@ -1,19 +1,41 @@
 const express = require('express')
 const router = express.Router()
-const usersMiddlewares = require('../middlewares/users')
+const usersMiddleware = require('../middlewares/users')
 const usersController = require('../controllers/users')
 const authMiddleware = require('../middlewares/auth')
 
-router.post('/users', usersMiddlewares.validateCreateUsers, usersController.createUsers)
+router.post(
+    '/users',
+    usersMiddleware.validateCreateUser,
+    usersController.createUser
+)
 
-router.get('/users/:id', authMiddleware.validateToken, usersMiddlewares.validateGetUsersById, usersController.getUsersById)
+router.get(
+    '/users',
+    authMiddleware.validateToken,
+    usersController.getUsers,
+)
 
-router.get('/users', authMiddleware.validateToken, usersMiddlewares.validateGetUsers, usersController.getUsers)
+router.get(
+    '/users/:id',
+    authMiddleware.validateToken,
+    usersMiddleware.validateGetUserById,
+    usersController.getUserById
+)
 
-router.delete('/users/:id', authMiddleware.validateToken, usersMiddlewares.validateDeleteUsers, usersController.deleteUsers)
+router.put(
+    '/users/:id',
+    authMiddleware.validateToken,
+    usersMiddleware.validateUpdateUser,
+    usersController.updateUser
+)
 
-router.put('/users/:id', authMiddleware.validateToken, usersMiddlewares.validateUpdateUsers, usersController.updateUsers)
+router.delete(
+    '/users/:id',
+    authMiddleware.validateToken,
+    usersMiddleware.validateDeleteUser,
+    usersController.deleteUser
+)
 
 
-
-module.exports = router;
+module.exports = router;

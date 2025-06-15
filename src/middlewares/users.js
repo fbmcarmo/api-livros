@@ -1,16 +1,16 @@
-const{ Users } = require('../models');
+const { Users } = require('../models')
 const bcrypt = require('bcrypt')
 
-async function validateCreateUsers(req, res, next){
-    const {nome, email, password} = req.body
+async function validateCreateUser(req, res, next){
+    const { name, email, password } = req.body
 
-    if(!nome || !email || !password){
+    if(!name || !email || !password){
         return res.status(400).send({
-            error: 'Todos os campos são obrigatórios!'
+            error: 'Todos os campos são obrigatórios'
         })
     }
-    
-    if(nome.length > 255){
+
+    if(name.length > 255){
         return res.status(400).send({
             error: 'O nome não pode ter mais que 255 caracteres'
         })
@@ -22,89 +22,147 @@ async function validateCreateUsers(req, res, next){
         })
     }
 
-    const existingUser = await Users.findOne({         
-        where: {                               
+    const existingUser = await Users.findOne({
+        where: {
             email: email
         }
-    })   
+    })
 
     if(existingUser){
         return res.status(400).send({
-            error: 'Email já cadastrado.'
+            error: 'Email já cadastrado'
         })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10) 
+    const hashedPassword = await bcrypt.hash(password, 10)
 
-    req.body.password = hashedPassword  
+    req.body.password = hashedPassword
+
+    next();
+}
+
+async function validateGetUserById(req, res, next) {
+    const { id } = req.params
+
+    if (!id) {
+        return res.status(400).send({
+            error: 'O ID do usuário é obrigatório'
+        })
+    }
+
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send({
+            error: 'O ID deve ser um número válido maior que zero'
+        })
+    }
+
+    const user = await Users.findByPk(id)
+
+    if (!user) {
+        return res.status(404).send({
+            error: 'Usuário não encontrado'
+        })
+    }
+
+    req.user = user
 
     next()
 }
 
-function validateDeleteUsers(req, res, next){
-    const { id } = req.params;
+async function validateUpdateUser(req, res, next) {
+    const { id } = req.params
+    const { name, email, password } = req.body
 
-    if(!id){
-        return res.status(400).send('ID do usuário é obrigatório')
-    }
-
-    next();
-}
-
-function validateGetUsersById(req, res, next){
-    const { id } = req.params;
-
-    if(!id){
-        return res.status(400).send('ID do usuário é obrigatório')
-    }
-
-    next();
-}
-
-
-async function validateUpdateUsers(req, res, next){
-    const {nome, email, password} = req.body
-
-    if(!nome || !email || !password){
+    if (!id) {
         return res.status(400).send({
-            error: 'Todos os campos são obrigatórios para atualização!'
+            error: 'O ID do usuário é obrigatório'
         })
     }
-    
-    if(nome.length > 255){
+
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send({
+            error: 'O ID deve ser um número válido maior que zero'
+        })
+    }
+
+    const user = await Users.findByPk(id)
+    if (!user) {
+        return res.status(404).send({
+            error: 'Usuário não encontrado'
+        })
+    }
+
+    if (!name && !email && !password) {
+        return res.status(400).send({
+            error: 'Pelo menos um dos campos (name, email ou password) deve ser informado para atualização'
+        })
+    }
+
+    if (name && name.length > 255) {
         return res.status(400).send({
             error: 'O nome não pode ter mais que 255 caracteres'
         })
     }
 
-    if(email.length > 255){
+    if (email && email.length > 255) {
         return res.status(400).send({
             error: 'O email não pode ter mais que 255 caracteres'
         })
     }
 
-    const existingUser = await Users.findOne({         
-        where: {                               
-            email: email
+    if (email && email !== user.email) {
+        const existingUser = await Users.findOne({
+            where: { email: email }
+        })
+
+        if (existingUser) {
+            return res.status(400).send({
+                error: 'Este email já está cadastrado para outro usuário'
+            })
         }
-    }) 
-    next();
-}
-
-function validateGetUsers(req, res, next){
-    const { id } = req.params;
-
-    if(!id){
-        return res.status(400).send('ID do usuário é obrigatório')
     }
 
-    next();
+    if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10)
+        req.body.password = hashedPassword
+    }
+
+    req.user = user
+
+    next()
+}
+
+async function validateDeleteUser(req, res, next) {
+    const { id } = req.params
+
+    if (!id) {
+        return res.status(400).send({
+            error: 'O ID do usuário é obrigatório'
+        })
+    }
+
+    if (isNaN(id) || parseInt(id) <= 0) {
+        return res.status(400).send({
+            error: 'O ID deve ser um número válido maior que zero'
+        })
+    }
+
+    const user = await Users.findByPk(id)
+
+    if (!user) {
+        return res.status(404).send({
+            error: 'Usuário não encontrado'
+        })
+    }
+
+    req.user = user
+
+    next()
 }
 
 module.exports = {
-    validateCreateUsers,
-    validateDeleteUsers,
-    validateGetUsersById,
-    validateUpdateUsers,
-    validateGetUsers
+    validateCreateUser,
+    validateGetUserById,
+    validateUpdateUser,
+    validateDeleteUser
 }
