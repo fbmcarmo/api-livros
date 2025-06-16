@@ -10,7 +10,6 @@ router.get(
 )
 router.get(
     '/livros/:id',
-    authMiddleware.validateToken,
     livrosMiddleware.validateGetLivroById,
     livrosController.getLivroById
 )
