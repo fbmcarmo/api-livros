@@ -5,8 +5,7 @@ const livrosMiddleware = require('../middlewares/livros')
 const authMiddleware = require('../middlewares/auth')
 
 router.get(
-    '/livros', 
-    authMiddleware.validateToken,
+    '/livros',
     livrosController.getLivros
 )
 router.get(
