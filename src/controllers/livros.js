@@ -32,7 +32,10 @@ async function getLivroById(req, res) {
 
 async function createLivro(req, res) {
     try {
-        const livro = await Livros.create(req.body)
+        const userId = req.user.id;  
+        const livroData = { ...req.body, userId };
+
+        const livro = await Livros.create(livroData)
 
         return res.status(201).send(livro)
         
@@ -79,11 +82,26 @@ async function updateLivro(req, res) {
     }
 }
 
+async function getMeusLivros(req, res) {
+  try {
+    const userId = req.user.id;
+    const meusLivros = await Livros.findAll({
+      where: { userId },
+    });
+
+    return res.send(meusLivros);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send('Erro ao buscar seus livros');
+  }
+}
+
 
 module.exports = {
     getLivros,
     getLivroById,
     createLivro,
     deleteLivro,
-    updateLivro
+    updateLivro,
+    getMeusLivros
 }
