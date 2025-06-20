@@ -14,7 +14,7 @@ router.get(
     livrosController.getLivroById
 )
 router.get(
-    '/livros/meusLivros',
+    '/meusLivros',
     authMiddleware.validateToken,
     livrosController.getMeusLivros
 )
