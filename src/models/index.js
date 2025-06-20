@@ -8,6 +8,9 @@ sequelize.sync({alter: true})
         'Erro ao sincronizar tabelas', error
     ))
 
+Livros.belongsTo(Users, { foreignKey: 'userId', as: 'usuario' });
+Users.hasMany(Livros, { foreignKey: 'userId', as: 'livros' });    
+
     module.exports = {
         Users,
         Livros,
