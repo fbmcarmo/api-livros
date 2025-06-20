@@ -30,8 +30,14 @@ const Livros = sequelize.define('Livros', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    descricao: {
-        type: DataTypes.TEXT,
+    descricao: DataTypes.TEXT,
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'Users', 
+            key: 'id'
+        }
     }
 })
 

@@ -2,6 +2,9 @@ const sequelize = require('../config/database')
 const Users = require('./users')
 const Livros = require('./livros')
 
+Users.hasMany(Livros, { foreignKey: 'userId' });
+Livros.belongsTo(Users, { foreignKey: 'userId' });
+
 sequelize.sync({alter: true})
     .then(() => console.log('Tabelas sincronizadas com sucesso'))
     .catch((error) => console.error(
@@ -10,5 +13,5 @@ sequelize.sync({alter: true})
 
     module.exports = {
         Users,
-        Livros
+        Livros,
     }
