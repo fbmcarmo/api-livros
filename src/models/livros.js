@@ -33,21 +33,7 @@ const Livros = sequelize.define('Livros', {
     },
     descricao: {
         type: DataTypes.TEXT,
-    },
-    userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Users',
-      key: 'id',
-    },
-  },
-}, {
-  tableName: 'Livros',
-  timestamps: false,
+    }
 })
-
-Livros.belongsTo(Users, { foreignKey: 'userId', as: 'usuario' });
-Users.hasMany(Livros, { foreignKey: 'userId', as: 'livros' });
 
 module.exports = Livros;
