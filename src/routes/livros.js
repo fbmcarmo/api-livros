@@ -13,11 +13,11 @@ router.get(
     livrosMiddleware.validateGetLivroById,
     livrosController.getLivroById
 )
-//router.get(
-    //'/livros/meusLivros',
-    //authMiddleware.validateToken,
-    //livrosController.getMeusLivros
-//)
+router.get(
+    '/livros/meusLivros',
+    authMiddleware.validateToken,
+    livrosController.getMeusLivros
+)
 router.post(
     '/livros',
     authMiddleware.validateToken,
